@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-POSTGRES=False or True
+#POSTGRES=False or True
+POSTGRES=False
 
 import gzip
 import os
@@ -136,10 +137,10 @@ CREATE TABLE actor_title_role (
     for cmd in '''
 
 CREATE TABLE movie (
-  id SERIAL, title TEXT, year INTEGER, nth TEXT, for_video BOOLEAN
+  id {0}, title TEXT, year INTEGER, nth TEXT, for_video BOOLEAN
   );
 CREATE TABLE actor (
-  id SERIAL, name TEXT, gender TEXT
+  id {0}, name TEXT, gender TEXT
   );
 CREATE TABLE role (
   movie_id INTEGER, actor_id INTEGER, name TEXT
@@ -175,7 +176,7 @@ DROP INDEX tmp2;
 
 VACUUM;
 
-'''.split(';'):
+'''.format(POSTGRES and 'SERIAL' or 'INTEGER PRIMARY KEY').split(';'):
         db.execute(cmd)
         connection.commit()
 
